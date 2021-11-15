@@ -8,6 +8,7 @@ import librosa
 random.seed(100)
 
 data_dir = "../data"
+train_wavs = 40
 
 def clear_datadirs():
 
@@ -32,7 +33,7 @@ def create_spectrograms(wavs_path):
         spectrogram = librosa.feature.melspectrogram(y=y, sr=sr)
         db_converted = librosa.power_to_db(spectrogram, ref=np.max)[:, :1280]
         mini_grams = np.hsplit(db_converted, 10)
-        train_or_test = "train" if i < 60 else "test"
+        train_or_test = "train" if i < train_wavs else "test"
         for j,gram in enumerate(mini_grams):
             # im = Image.fromarray(gram)
             filename = wav_file.replace(".wav", "") + "_" + str(j) + ".png"
