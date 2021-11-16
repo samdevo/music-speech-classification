@@ -60,13 +60,13 @@ def create_generators():
             os.path.join(data_dir, "train"),
             color_mode='grayscale',
             target_size=(128, 128),
-            batch_size=32,
+            batch_size=16,
             class_mode='binary')
     validation_generator = test_datagen.flow_from_directory(
             os.path.join(data_dir, "test"),
             color_mode='grayscale',
             target_size=(128, 128),
-            batch_size=32,
+            batch_size=16,
             class_mode='binary')
     return train_generator, validation_generator
 
@@ -107,10 +107,13 @@ if __name__ == "__main__":
     model = create_model()
 
     model.fit(train_generator, 
-        epochs=15, 
+        epochs=10, 
         verbose=1,
         validation_data=validation_generator, 
         validation_steps=800)
+
+    print("evaluating model: ")
+    print(model.evaluate(validation_generator))
 
 
 
