@@ -7,13 +7,27 @@ import librosa
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+import argparse
 
 
 
 random.seed(100)
 
-data_dir = "../data"
 train_wavs = 40
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--load_dataset", 
+                    required=True,
+                    help="Whether or not the program should generate the spectrogram or dataset\
+                    True: generate dataset, False: dataset already found in data path")
+parser.add_argument("--data",
+                    default="../data",
+                    help="designate filepath for .wav songs (this is also where the spectrogram \
+                    dataset will go")
+ARGS = parser.parse_args()
+
+data_dir = ARGS.data
 
 # empties train and test folders to be refilled
 def clear_datadirs():
@@ -102,12 +116,15 @@ def create_model():
 
 
 if __name__ == "__main__": 
-    # reload_data()
+    if ARGS.load_dataset == "True":
+        reload_data()
+
     train_generator, validation_generator = create_generators()
+
     model = create_model()
 
     model.fit(train_generator, 
-        epochs=10, 
+        epochs=15, 
         verbose=1,
         validation_data=validation_generator, 
         validation_steps=800)
